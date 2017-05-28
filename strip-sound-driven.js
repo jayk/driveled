@@ -6,7 +6,7 @@ var OPC = new require('./opc')
 var client = new OPC('localhost', 7890);
 
 var multiplier = 10;
-var mirror = 0;
+var mirror = 1;
 
 var max = 0;
 var count = 0;
@@ -36,24 +36,25 @@ function draw(channels) {
 
     var num_channels = channels.length - 1;
     var width = Math.floor(total_leds / num_channels);
+    var remainder = total_leds % num_channels;
 
-//    console.log('channels: ', num_channels);
-//    console.log('width: ', width);
+    //console.log('channels: ', num_channels);
+    //console.log('width: ', width);
     
     var red,green,blue;
     var base = 10;
     
-    var r=0.5;
+    var r=1 ; // 0.5;
     var g= 0.5;
-    var b=1;
+    var b= 0.75 ; // 1;
     
     var pos;
     var pixel;
     for (pos = 0; pos < num_channels; pos++)
     {
         pixel = pos * width;
-        b = 1;
-        r = 0.9 * ((multiplier * channels[pos]) / 256);
+        b = 0.75 ; //  1; 0.5 ;
+        r = 1; // 0.9 * ((multiplier * channels[pos]) / 256);
         g = 0.8 * ((multiplier * channels[pos]) / 256);
         red = base + Math.floor( r * multiplier * channels[pos]);
         green = base + Math.floor( g * multiplier * channels[pos]);
@@ -80,10 +81,10 @@ function draw(channels) {
         if (count > 100) {
             count = 0;
             // re-evaluate
-            if (max < 96 && multiplier < 20) {
+            if (max < 96 && multiplier < 24) {
                 multiplier = multiplier + 1
                 console.log("Adjusted multiplier Upwards: ", multiplier);
-            } else if (max >= 250 && multiplier > 5) {
+            } else if (max >= 250 && multiplier > 15) {
                 multiplier = multiplier - 1;
                 console.log("Adjusted multiplier Downwards: ", multiplier);
             }

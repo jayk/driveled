@@ -24,7 +24,7 @@ var max = 0;
 
 var rotate = 0;
 var count = 0;
-var scale = 10;
+var scale = 1;
 var pixels = [ 0, 0, 0, 0, 24, 48, 72, 96, 192, 255, 255, 255, 192, 128, 96, 72, 48, 24 ];
 var strip = [].concat(pixels).concat(pixels).concat(pixels);
 
@@ -41,28 +41,34 @@ rl.on('line', function(data){
     var speeddata = data.split(';');
     //scale = speeddata[0];
 
-    scale = Math.floor((speeddata[0] * 1.46667 * 9) / 100);
+//    scale = Math.floor((speeddata[0] * 1.46667 * 9) / 100);
+    scale = (speeddata[0] * 1.46667 * 9) / 20;
     console.log("scale is:", scale);
 
 });
 
 setInterval(function() {
     draw();
-}, 10);
+}, 50);
 
-
+var current = 0, floor = 0;
 function draw(channels) {
 
     var red,green,blue;
     
-    var r=0.9;
-    var g= 0.3;
-    var b=1;
+    var r=1 ; Math.random(); // 0.9;
+    var g=0.2 ; // Math.random(); //  0.3;
+    var b=0.5; Math.random(); // 1;
     
     var pos;
     var pixel;
     var max_pattern = pixels.length;
-    for (var h = 0; h < scale; h++) {
+    current = current + scale;
+    if (current >= 1) {
+        floor = Math.floor(current);
+        current = current - floor;
+    }
+    for (var h = 0; h < floor; h++) {
         strip.unshift(strip.pop()); 
     }
 
