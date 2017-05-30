@@ -5,6 +5,7 @@ var util = require('util')
 
 module.exports = function Display() { 
     this.strips = [];
+    this.changes = [];
 
     // create a strip and initialize it;
     this.setup_strip = function(strip_num, strip_len, default_color) {
@@ -13,8 +14,10 @@ module.exports = function Display() {
         }
         console.log(util.inspect(default_color));
         this.strips[strip_num] = new Array(strip_len);
+        this.changes[strip_num] = new Array(strip_len);
         for (var i = 0; i < strip_len; i++) {
             this.strips[strip_num][i] = default_color.slice();
+            this.changes[strip_num][i] = true;
         }
     };
     
@@ -35,13 +38,27 @@ module.exports = function Display() {
     };
     
     this.set_pixel= function( strip, position, color) {
-        this.strips[strip][position] = this.clean_color(color);
+        var c = this.clean_color(color);
+        if (this.strips[strip].length > position) {
+//            var d= this.strips[strip][position].slice();
+
+            // we only change the color if the color actually changed
+            if (this.strips[strip][position][0] != c[0] || 
+                this.strips[strip][position][1] != c[1] || 
+                this.strips[strip][position][2] != c[2]) {
+                this.strips[strip][position] = c;
+                this.changes[strip][position] = true;
+            }
+        }
     };
 
     this.set_pixels= function( strip, startpos, endpos, color) {
         var c = this.clean_color(color);
         for (var i = startpos; i < endpos; i++) {
-            this.strips[strip][i] = c;
+            if (this.strips[strip][i][0] != c[0] || this.strips[strip][i][1] != c[1] || this.strips[strip][i][1] != c[1]) {
+                this.changes[strip][i] = true;
+                this.strips[strip][i] = c;
+            }
         }
     };
 
@@ -55,15 +72,21 @@ module.exports = function Display() {
         // the pixel position by 64 for each one.
         
         var strip, pixel_offset = 0;
+        //var count =0;
         for (var i = 0, l = this.strips.length; i < l; i++) {
             strip = this.strips[i];
             for (var j = 0, k = strip.length; j < k; j++) {
                 color = strip[j];
-                client.setPixel(pixel_offset + j, color[0], color[1], color[2]);
+                if (this.changes[i][j] == true) {
+        //            count++;
+                    client.setPixel(pixel_offset + j, color[0], color[1], color[2]);
+                    this.changes[i][j] = false;
+                }
             }
             pixel_offset += 64;
         }
         client.writePixels();
+        //console.log('Updated ' +count + ' pixels.');
     };
 
     return this;

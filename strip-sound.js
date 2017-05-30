@@ -34,12 +34,32 @@ rl.on('line', function(data){
     //console.log(line);
 //    console.log("recieved ", data)
     var pixeldata = data.split(';');
-    draw(pixeldata);
+    update(pixeldata);
 })
 
 var rotate = 0;
+var rcount = 0;
+var rate = 1;
+var do_pulse = false;
 
-function draw(channels) {
+setInterval(function() {
+    if (do_pulse) {
+        if (rcount >= 53) {
+            rcount = 0;
+        } 
+        //else {
+    //        rcount += rate;
+    //    }
+        for (var i = 0; i < rate; i++) {
+            display.set_pixel(0, rcount+i, [255, 172, 128]);
+            display.set_pixel(1, rcount+i, [255, 172, 128]);
+        }
+        rcount+=rate;
+    }
+    display.write_to_opc(client);
+}, 20);
+
+function update(channels) {
 
     var total_leds = 54;
     if (mirror) {
@@ -62,9 +82,15 @@ function draw(channels) {
     
     var pos;
     var pixel, color;
-    for (var j = 0; j < 128; j++) {
-        client.setPixel(j, 172, 64, 128);
+    for (var j = 0; j < 4; j++) {
+        display.set_pixel(0, j, [172, 64, 128]);
+        display.set_pixel(1, j, [172, 64, 128]);
     }
+    for (var j = 50; j < 54; j++) {
+        display.set_pixel(0, j, [172, 64, 128]);
+        display.set_pixel(1, j, [172, 64, 128]);
+    }
+
     for (pos = 0; pos < num_channels; pos++)
     {
         pixel = pos * width;
@@ -89,13 +115,6 @@ function draw(channels) {
         }
         if (blue > 255) {
             blue = 255;
-        }
-
-        if (false && count %  1000 == 0) {
-            rotate++;
-            if (rotate > 54) {
-                rotate = 0;
-            }
         }
 
         if (count > 100) {
@@ -133,11 +152,6 @@ function draw(channels) {
                 display.set_pixel(0, p2, color);
                 display.set_pixel(1, p, color);
                 display.set_pixel(1, p2, color);
-/*                client.setPixel(p, red, green, blue);
-                client.setPixel(p2, red, green, blue);
-                client.setPixel(64+p, red, green, blue);
-                client.setPixel(64+p2, red, green, blue);
-*/
             }
         } else {
 
@@ -150,11 +164,7 @@ function draw(channels) {
                 display.set_pixel(1, px, color);
             }
         }
-//        var t = pixel * 0.2 + millis * 0.002;
-//        var red = 0;
     }
-    display.write_to_opc(client);
-//    client.writePixels();
 }
 
 //setInterval(draw, 30);
