@@ -72,13 +72,13 @@ module.exports = function Display() {
         // the pixel position by 64 for each one.
         
         var strip, pixel_offset = 0;
-        //var count =0;
+//        var count =0;
         for (var i = 0, l = this.strips.length; i < l; i++) {
             strip = this.strips[i];
             for (var j = 0, k = strip.length; j < k; j++) {
                 color = strip[j];
                 if (this.changes[i][j] == true) {
-        //            count++;
+//                    count++;
                     client.setPixel(pixel_offset + j, color[0], color[1], color[2]);
                     this.changes[i][j] = false;
                 }
@@ -86,7 +86,7 @@ module.exports = function Display() {
             pixel_offset += 64;
         }
         client.writePixels();
-        //console.log('Updated ' +count + ' pixels.');
+//        console.log('Updated ' +count + ' pixels.');
     };
 
     return this;

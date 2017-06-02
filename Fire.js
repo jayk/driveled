@@ -13,18 +13,19 @@ module.exports = function Effects() {
             level_in_segment = (i % 85);
             heat_level = level_in_segment * 3;
 
+           // console.log('ramp', i, segment, heat_level);
             if (segment == 2) {
                 // hottest - red and green are full brightness, blue is ramped
                 heatramp[i] = [
                     255,        // red
-                    255,        // green
-                    heat_level  // blue
+                    215,        // green
+                    byte_clamp(heat_level - 20)  // blue
                 ]; 
             } else if (segment == 1) {
                 // medium heat - red is full brightness, green is ramped, blue is off
                 heatramp[i] = [
                     255,        // red
-                    heat_level, // green
+                    byte_clamp(heat_level - 40), // green
                     0           // blue
                 ]; 
 
@@ -35,7 +36,6 @@ module.exports = function Effects() {
                     0,          // green
                     0           // blue
                 ]; 
-
             }
         }
         // heatramp now contains an RGB color ramp for fire colors based on
@@ -45,7 +45,11 @@ module.exports = function Effects() {
 
     function byte_clamp(byte) {
         if (byte <= 255) {
-            return byte;
+            if (byte < 0) {
+                return 0;
+            } else {
+                return byte;
+            }
         } else {
             return 255;
         }
@@ -65,20 +69,24 @@ module.exports = function Effects() {
     // sparks for the first x leds
     // heat_array will be modified in place with new heat values.  
     // returns an array of color values
-    this.fire_simulation_frame = function(heat_color_map, heat_array, cooling, sparks) {
+    this.fire_simulation_frame = function(heat_array, heat_color_map, cooling, sparks) {
         var size = heat_array.length;
         var colors_out = new Array(size);
 
         // cool all the cells down a little
         for (var i = 0; i < size; i++) {
-            heat_array[i] = heat_array[i] - random_byte(((cooling * 10) / size) + 2) ;
+            heat_array[i] = byte_clamp(heat_array[i] - random_byte(((cooling * 14) / size) + 2));
         }
+//        console.log('after cooling');
 
+        //console.log('size', size);
         // heat spreads upwards  
-        for (var j = size - 3; size > 0; j--) {
-            heat_array[j] = Math.floor( (heat_array[j-1] + heat_array[j-2] + heat_array[j-2]) / 3);
+        for (var j = size - 1; j > 3; j--) {
+            //console.log('j', j);
+            heat_array[j] = byte_clamp(Math.floor( (heat_array[j-1] + heat_array[j-2] + heat_array[j-2]) / 3));
         }
         
+        //console.log('after spreading');
         // sparking.  Two possibilities, we have a number, or we have an array.
         // if we have a number, it's a random possibility of sparking (between 0 and 255)
         // if we have an array, it's actual sparks to feed in.
@@ -91,13 +99,16 @@ module.exports = function Effects() {
             }
         } else {
             if (random_byte(255) < sparks) {
-                heat_array[random_byte(6)] = byte_clamp(heat_array[y]+random_byte(95)+160);
+                var pos = random_byte(5);
+                heat_array[pos] = byte_clamp(heat_array[pos]+random_byte(95)+140);
             }
         }
 
         for (var m = 0; m < size; m++) {
             colors_out[m] = heat_color_map[heat_array[m]];
         }
+        //console.log('heat', util.inspect(heat_array));
+        //console.log('FIRE_COLORS', util.inspect(colors_out));
         return colors_out;
     }
 
