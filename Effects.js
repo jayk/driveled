@@ -1,4 +1,6 @@
-// color adjustment module for working with color strips.
+// OBSOLETE AND BROKEN.
+// DO NOT USE
+//   color adjustment module for working with color strips.
 var util = require('util')
 
 module.exports = function Effects() { 
@@ -60,28 +62,23 @@ module.exports = function Effects() {
             r = c;
             g = x;
             b = 0;
-        }
-        else if (h < 120) {
+        } else if (h < 120) {
             r = x;
             g = c;
             b = 0;
-        }
-        else if (h < 180) {
+        } else if (h < 180) {
             r = 0;
             g = c;
             b = x;
-        }
-        else if (h < 240) {
+        } else if (h < 240) {
             r = 0;
             g = x;
             b = c;
-        }
-        else if (h < 300) {
+        } else if (h < 300) {
             r = x;
             g = 0;
             b = c;
-        }
-        else {
+        } else {
             r = c;
             g = 0;
             b = x;
@@ -92,6 +89,18 @@ module.exports = function Effects() {
         b = normalize_rgb_value(b, m);
 
         return [r,g,b];
+    }
+    
+    function clamp_value(byte, min, max) {
+        if (byte <= max) {
+            if (byte < min) {
+                return min;
+            } else {
+                return byte;
+            }
+        } else {
+            return max;
+        }
     }
 
     // expose our functions;
@@ -109,6 +118,28 @@ module.exports = function Effects() {
         }
         return hsl_to_rgb(hsl);
     }
+
+    this.apply_adjustments = function(color, adjustments) {
+        var new_color = color.slice();
+        var hsl = rgb_to_hsl(rgb);
+        if (typeof adjustments.hue != 'undefined') {
+            hsl.h += adjustments.hue;
+            if (hsl.h > 360) {
+                hsl.h -= 360;
+            }
+            else if (hsl.h < 0) {
+                hsl.h += 360;
+            }
+        }
+        if (typeof adjustments.luminosity != 'undefined') {
+            hsl.l = clamp_value(hsl.l + adjustments.luminosity, 0, 255);
+        }
+        if (typeof adjustments.saturation != 'undefined') {
+            hsl.l = clamp_value(hsl.s + adjustments.saturation, 0, 255);
+        }
+
+    }
+
 
     // shifts an entire array of colors around the hue by degree
     this.hue_shift_array = function(degree, color_array) {
