@@ -38,7 +38,7 @@ var rotate = 0;
 
 function draw(channels) {
 
-    var total_leds = 54;
+    var total_leds = 63;
     if (mirror) {
         total_leds = total_leds / 2;
     }
@@ -66,8 +66,8 @@ function draw(channels) {
     {
         pixel = pos * width;
         b = 0.75 ; //  1; 0.5 ;
-        r = 1; // 0.9 * ((multiplier * channels[pos]) / 256);
-        g = 0.8 * ((multiplier * channels[pos]) / 256);
+        r = 0.1; // 0.9 * ((multiplier * channels[pos]) / 256);
+        g = 0.3 * ((multiplier * channels[pos]) / 256);
         red = base + Math.floor( r * multiplier * channels[pos]);
         green = base + Math.floor( g * multiplier * channels[pos]);
         blue = base + Math.floor( b * multiplier * channels[pos]);

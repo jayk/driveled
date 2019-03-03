@@ -32,10 +32,10 @@ var rl = readline.createInterface({
 
 rl.on('line', function(data){
     //console.log(line);
-//    console.log("recieved ", data)
+    console.log("recieved ", data)
     var pixeldata = data.split(';');
     update(pixeldata);
-})
+});
 
 var rotate = 0;
 var rcount = 0;

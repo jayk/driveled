@@ -16,41 +16,43 @@ var strip_size = 31;
 
 var leds = new Array(strip_size);
 var heat = new Array(strip_size);
-var heat2 = new Array(strip_size);
 var heat_colors = fire.get_heat_color_table();
 
 for (var i = 0, l = heat.length; i < l; i++) {
     heat[i] = 0;
-    heat2[i] = 0;
     leds[i] = [0,0,0];
 }
 
-display.setup_strip(0,  { strip_len: strip_size, default_color: display.get_color(1,0,0) }  );
-//display.setup_strip(1, strip_size, display.get_color(1,0,0), true);
+display.setup_strip(0, { 
+    strip_len: strip_size, 
+    default_color: 
+    display.get_color(1,0,0), 
+    reversed: false,
+    //adjustments: { hue: 90 }
+});
+
+display.setup_strip(1, { strip_len: strip_size, default_color: display.get_color(1,0,0), reversed: false});
+
 /*
 for (var i = 0, l = leds.length; i < l; i++) {
     display.set_pixel(0, i, leds[i]);
     display.set_pixel(1, i, leds[i]);
 }
 */
+
 setTimeout(function() {
     display.write_to_opc(client);
     setInterval(function() {
-        heat2[1] = heat[3];
-        heat2[3] = heat[1];
-        var colors = fire.fire_simulation_frame(heat, heat_colors, 50, 100);
-        //        var colors2 = fire.fire_simulation_frame(heat2, heat_colors, 50, 100);
-        draw(client, display, 0, colors);
-//        draw(client, display, 1, colors2);
+        var colors = fire.fire_simulation_frame(heat, heat_colors, 50, 120);
+        draw(client, display, colors);
     }, 40);
 }, 150);
 //console.log(util.inspect(display.strips));
 
-function draw(client, display, strip, colors) {
-    console.log("display:", display);
-    console.log("Strip:", strip);
+function draw(client, display, colors) {
     for (var i = 0, l = colors.length; i < l; i++) {
-        display.set_pixel(strip, i, colors[i]);
+        display.set_pixel(0, i, colors[i]);
+        display.set_pixel(1, i, colors[i]);
     }
     display.write_to_opc(client);
 }

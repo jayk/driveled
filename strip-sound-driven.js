@@ -29,7 +29,7 @@ var rotate = 0;
 
 function draw(channels) {
 
-    var total_leds = 54;
+    var total_leds = 60;
     if (mirror) {
         total_leds = total_leds / 2;
     }

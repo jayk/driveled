@@ -41,6 +41,7 @@ module.exports = function Display() {
             this.strips[strip_num][i] = default_color;
             this.changes[strip_num][i] = true;
         }
+        console.log(this.strips);
     };
 
     // resets entire strip to color provided, or if not provided, default_color;

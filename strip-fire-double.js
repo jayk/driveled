@@ -12,7 +12,7 @@ var util = require('util');
 var display = new Display();
 var fire = new Fire();
 
-var strip_size = 54;
+var strip_size = 31;
 
 var leds = new Array(strip_size);
 var heat = new Array(strip_size);
@@ -26,7 +26,7 @@ for (var i = 0, l = heat.length; i < l; i++) {
 }
 
 display.setup_strip(0, strip_size, display.get_color(1,0,0), true);
-display.setup_strip(1, strip_size, display.get_color(1,0,0), true);
+//display.setup_strip(1, strip_size, display.get_color(1,0,0), true);
 /*
 for (var i = 0, l = leds.length; i < l; i++) {
     display.set_pixel(0, i, leds[i]);

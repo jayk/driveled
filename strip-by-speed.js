@@ -26,7 +26,7 @@ var rotate = 0;
 var count = 0;
 var scale = 1;
 var pixels = [ 0, 0, 0, 0, 24, 48, 72, 96, 192, 255, 255, 255, 192, 128, 96, 72, 48, 24 ];
-var strip = [].concat(pixels).concat(pixels).concat(pixels);
+var strip = [].concat(pixels).concat(pixels).concat(pixels).concat(pixels);
 
 var readline = require('readline');
 var rl = readline.createInterface({

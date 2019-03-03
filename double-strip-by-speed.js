@@ -88,7 +88,7 @@ function draw(channels) {
         }
 
         client.setPixel(i, red, green, blue);
-        client.setPixel(118 - i, red, green, blue);
+        client.setPixel(106 - i, red, green, blue);
     //        var t = pixel * 0.2 + millis * 0.002;
     //        var red = 0;
     }
