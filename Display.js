@@ -31,7 +31,6 @@ module.exports = function Display() {
         } else {
             this.strip_attributes[strip_num].default_color = [0,0,0];
         }
-        console.log("strip_attributes", this.strip_attributes[strip_num]);
         strip_len = this.strip_attributes[strip_num].strip_len;
 
         this.strips[strip_num] = new Array(strip_len);
@@ -41,7 +40,7 @@ module.exports = function Display() {
             this.strips[strip_num][i] = default_color;
             this.changes[strip_num][i] = true;
         }
-        console.log(this.strips);
+        // console.log(this.strips);
     };
 
     // resets entire strip to color provided, or if not provided, default_color;

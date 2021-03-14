@@ -4,7 +4,7 @@
 //
 
 var OPC = new require('./opc')
-var client = new OPC('localhost', 7890);
+var client = new OPC('lightbox.local', 7890);
 var Display = require('./Display');
 var Fire = require('./Fire');
 var util = require('util');

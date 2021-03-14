@@ -4,7 +4,7 @@
 //
 
 var OPC = new require('./opc')
-var client = new OPC('localhost', 7890);
+var client = new OPC('lightbox.local', 7890);
 var Display = require('./Display');
 var Fire = require('./Fire');
 var util = require('util');
@@ -42,11 +42,26 @@ for (var i = 0, l = leds.length; i < l; i++) {
 }
 */
 
+var interval;
+var step = 0;
+var cooling = 120;
+var direction = -1;
+
 setTimeout(function() {
     display.write_to_opc(client);
-    setInterval(function() {
-        var colors = fire.fire_simulation_frame(heat, heat_colors, 50, 120);
+    interval = setInterval(function() {
+        var colors = fire.fire_simulation_frame(heat, heat_colors, cooling, 120);
         draw(client, display, colors);
+        step++;
+        if (step % 2 == 0) {
+            cooling += direction;
+        }
+        if (step == 40) { 
+            direction = 1;
+        }
+        if (step > 90) {
+            clearInterval(interval);
+        }
     }, 40);
 }, 150);
 //console.log(util.inspect(display.strips));

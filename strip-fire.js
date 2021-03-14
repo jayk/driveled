@@ -26,13 +26,6 @@ for (var i = 0, l = heat.length; i < l; i++) {
 }
 
 display.setup_strip(0,  { strip_len: strip_size, default_color: display.get_color(1,0,0) }  );
-//display.setup_strip(1, strip_size, display.get_color(1,0,0), true);
-/*
-for (var i = 0, l = leds.length; i < l; i++) {
-    display.set_pixel(0, i, leds[i]);
-    display.set_pixel(1, i, leds[i]);
-}
-*/
 setTimeout(function() {
     display.write_to_opc(client);
     setInterval(function() {
@@ -42,13 +35,11 @@ setTimeout(function() {
         //        var colors2 = fire.fire_simulation_frame(heat2, heat_colors, 50, 100);
         draw(client, display, 0, colors);
 //        draw(client, display, 1, colors2);
-    }, 40);
+    }, 180);
 }, 150);
 //console.log(util.inspect(display.strips));
 
 function draw(client, display, strip, colors) {
-    console.log("display:", display);
-    console.log("Strip:", strip);
     for (var i = 0, l = colors.length; i < l; i++) {
         display.set_pixel(strip, i, colors[i]);
     }

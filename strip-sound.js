@@ -18,8 +18,10 @@ var red=255,
     green = 0
     blue = 128
 
-display.setup_strip(0, 54, display.get_color(red, green, blue));
-display.setup_strip(1, 54, display.get_color(red, green, blue));
+var STRIP_SIZE= 48;
+
+display.setup_strip(0, STRIP_SIZE, display.get_color(red, green, blue));
+display.setup_strip(1, STRIP_SIZE, display.get_color(red, green, blue));
 display.write_to_opc(client);
 // client.writePixels();
 
@@ -61,7 +63,7 @@ setInterval(function() {
 
 function update(channels) {
 
-    var total_leds = 54;
+    var total_leds = STRIP_SIZE;
     if (mirror) {
         total_leds = total_leds / 2;
     }
@@ -86,7 +88,7 @@ function update(channels) {
         display.set_pixel(0, j, [172, 64, 128]);
         display.set_pixel(1, j, [172, 64, 128]);
     }
-    for (var j = 50; j < 54; j++) {
+    for (var j = 50; j < STRIP_SIZE; j++) {
         display.set_pixel(0, j, [172, 64, 128]);
         display.set_pixel(1, j, [172, 64, 128]);
     }
@@ -157,8 +159,8 @@ function update(channels) {
 
             for (var j = 0; j < width; j++) {
                 var px = rotate + pixel + j;
-                if (px > 54) {
-                    px = px - 54;
+                if (px > STRIP_SIZE) {
+                    px = px - STRIP_SIZE;
                 }
                 display.set_pixel(0, px, color);
                 display.set_pixel(1, px, color);

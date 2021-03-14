@@ -48,17 +48,18 @@ rl.on('line', function(data){
 });
 
 setInterval(function() {
+    //process.stdout.write('.');
     draw();
-}, 50);
+}, 150);
 
 var current = 0, floor = 0;
 function draw(channels) {
 
     var red,green,blue;
     
-    var r=1 ; Math.random(); // 0.9;
+    var r=0.5 ; Math.random(); // 0.9;
     var g=0.2 ; // Math.random(); //  0.3;
-    var b=0.5; Math.random(); // 1;
+    var b=1; Math.random(); // 1;
     
     var pos;
     var pixel;
