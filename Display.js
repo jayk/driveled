@@ -133,6 +133,9 @@ module.exports = function Display() {
         if (typeof this.strip_attributes[strip].adjustments == 'object') {
             c = this.adjust_color(c, this.strip_attributes[strip].adjustments);
         }
+        if (endpos > this.strips[strip].length) {
+            endpos = this.strips[strip].length -1;
+        }
         for (var i = startpos; i < endpos; i++) {
             if (this.strips[strip][i][0] != c[0] || this.strips[strip][i][1] != c[1] || this.strips[strip][i][1] != c[1]) {
                 this.changes[strip][i] = true;
