@@ -65,16 +65,15 @@ rl.on('line', function(data){
 
 //    console.log('pixel:', pixeldata);
     if (diff_sum > 16 && scale <= 2 ) {
-        scale += 0.2;
+        scale += 0.4;
     } else if (diff_sum <= 16) {
         scale -= 0.2;
         if (scale < 0) {
             scale = 0.01;
         }
     }
-    //console.log(scale);
     draw(pixeldata);
-})
+});
 
 var rotate = 0;
 var strip_size = 48;
